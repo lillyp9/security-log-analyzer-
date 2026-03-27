@@ -40,27 +40,28 @@ def parse_all_logs(logs):
                 "raw_line": line  #list of dict 
             })
     return pd.DataFrame(records) # create a dataframe 
-
-#show dataframe entries 
 df = parse_all_logs(logs)
-print(f"Parse {len(logs)} log entries")
-print(df.head())
+
 
 #Note : looking at the output , same ip adress shown 3 times through log 1 to 3 
 #same ip adress log 0 and 4 shown twice. indicates brute force 
 #Which IP addresses appear the most times ?
-ip_counts = df.groupby("ip")["raw_line"].count().reset_index() #group ip check line then count have it added to the new index
-ip_counts.columns = ["ip", "count"] #column names 
-ip_counts = ip_counts.sort_values("count", ascending=False) #sort ipcounts , sort counts from highest to lowest
-print(ip_counts)
-
+#create new function
+def detect_suspicious_ips(df, threshold = 10): # common threshold for 10 failed attempts.
+    ip_counts = df.groupby("ip")["raw_line"].count().reset_index() #group ip check line then count have it added to the new index
+    ip_counts.columns = ["ip", "count"] #column names 
+    ip_counts = ip_counts.sort_values("count", ascending=False) #sort ipcounts , sort counts from highest to lowest
+    suspicious_ips = ip_counts.loc[ip_counts['count'] > threshold] 
+    return suspicious_ips, ip_counts
+#Note: had to create it into a new function to import it to generate_report.py
 #Note:  Output shows that ip 91.240.118.172 has 200 attempts , 185.220.101.45 shows 114 attempts , 203.45.167.23 shows 106 attempts
 #indicating that a 3 were attempst of brute force by attacker 
-#Detection Log
 
-threshold = 10 # common threshold for 10 failed attempts.
-
-suspicious_ips = ip_counts.loc[ip_counts['count'] > threshold] 
-print(f"Suspicious IPs detected {suspicious_ips}")
+if __name__ == "__main__":
+#all test prints below 
+#show dataframe entries 
+    print(f"Parse {len(logs)} log entries")
+    print(df.head())
+    
     
 
