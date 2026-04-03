@@ -33,6 +33,19 @@ def generate_log (timestamp, ip , username, success=False):
     line = f"{timestamp.strftime('%b %d %H:%M:%S')} {server} sshd: {event} from {ip} port{port}"
     return line 
 
+#gengerate new attack log line 
+
+def attack_log():
+    time_stamp = datetime.now()
+    random_attack = random.choice(suspicious_ips)
+    random_user = random.choice(usernames)
+
+    new_line = generate_log(time_stamp, random_attack, random_user, False)
+    with open('data/ssh_logs.txt', 'a') as file:
+        file.write(new_line + '\n') #append to the log file    
+    print(f"New attack log: {new_line}")
+
+
 #generate timestamp
 def generated_timestamp (start_time, timedelta):
     start_time = datetime(2024, 1, 1, 0, 0, 0)
@@ -68,6 +81,7 @@ def log_file(output_file , days=30):
         with open(output_file, 'w') as f:
             f.write('\n'.join(logs))
         print(f"Generate{len(logs)} of entries saved to {output_file}") 
+
 
     #Run the code 
 if __name__ == "__main__":
