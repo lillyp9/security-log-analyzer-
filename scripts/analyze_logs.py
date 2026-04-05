@@ -23,7 +23,7 @@ def parse_log_line(line):
     ip_match = re.search(ip_pattern, line) #use match to determine if the index and series matchs the expression
     
     #Extract timestamp 
-    time_pattern = r'\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}'
+    time_pattern = r'\w{3}\s+\d{1,2}\s+\d{4}\s+\d{2}:\d{2}:\d{2}'
     time_match = re.search(time_pattern, line)
     
     if ip_match and time_match:

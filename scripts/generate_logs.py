@@ -1,4 +1,5 @@
 import random
+import pandas as pd
 from datetime import datetime, timedelta
 
 #setup 
@@ -28,9 +29,9 @@ def generate_log (timestamp, ip , username, success=False):
     if success:
         event = f"Accepted Log In {username}"
     else: 
-        event = f"Falied Log In {username}" 
+        event = f"Failed Log In {username}" 
     #Format
-    line = f"{timestamp.strftime('%b %d %H:%M:%S')} {server} sshd: {event} from {ip} port{port}"
+    line = f"{timestamp.strftime('%b %d %Y %H:%M:%S')} {server} sshd: {event} from {ip} port{port}"
     return line 
 
 #gengerate new attack log line 
